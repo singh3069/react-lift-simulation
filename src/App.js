@@ -1,23 +1,49 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { useEffect, useState } from "react";
+import { useRef } from "react";
 
 function App() {
+  const [floorNumberByUserInput, setFloorNumberByUserInput] = useState([]);
+  const [generatedFloors, setGeneratedFloors] = useState([]);
+  const inputRef = useRef(null);
+  const generateFloor = () => {
+    if (inputRef.current.value === "") {
+      alert("Please enter a number");
+    }
+    if (inputRef.current.value <= 0) {
+      alert("These lifts don't go down");
+    }
+    setFloorNumberByUserInput(inputRef.current.value);
+  };
+
+  useEffect(() => {
+    setGeneratedFloors(
+      Array.from({ length: floorNumberByUserInput }, (_, index) => index + 1)
+    );
+  }, [floorNumberByUserInput]);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <header className="">hello lift </header>
+      <input type="number" ref={inputRef} />
+
+      <button onClick={generateFloor}>add floor</button>
+      {generatedFloors
+        .map((floor, index) => {
+          return (
+            <div key={index}>
+              <p
+                style={{
+                  backgroundColor: "red",
+                  color: "white",
+                }}
+              >
+                floor{index + 1}
+              </p>
+            </div>
+          );
+        })
+        .reverse()}
     </div>
   );
 }
